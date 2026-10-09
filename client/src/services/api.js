@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "/api",
+  baseURL: "https://masjid-tour-tracker.onrender.com/api" || "http://localhost:5000/api",
   timeout: 20000, // generous: a sleeping Neon / free host can take a few seconds to wake
 });
 
