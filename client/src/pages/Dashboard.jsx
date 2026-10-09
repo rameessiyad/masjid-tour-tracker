@@ -18,6 +18,7 @@ import ConfirmDialog from "../components/ConfirmDialog.jsx";
 import { ToastStack, useToasts } from "../components/Toast.jsx";
 import * as api from "../services/api.js";
 import { formatINR } from "../utils/format.js";
+import { matchesSearch } from "../utils/malayalamSearch.js";
 
 export default function Dashboard() {
   const [participants, setParticipants] = useState([]);
@@ -125,9 +126,10 @@ export default function Dashboard() {
   }
 
   const visible = useMemo(() => {
-    const q = search.trim().toLowerCase();
+    // Works with Malayalam or English (Manglish) typing.
+    const q = search.trim();
     return q
-      ? participants.filter((p) => p.name.toLowerCase().includes(q))
+      ? participants.filter((p) => matchesSearch(p.name, q))
       : participants;
   }, [participants, search]);
 
@@ -181,8 +183,8 @@ export default function Dashboard() {
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name"
-              aria-label="Search participants by name"
+              placeholder="Search by name (മലയാളം / English)"
+              aria-label="Search participants by name in Malayalam or English"
               autoComplete="off"
               className="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-11 outline-none transition focus:border-green-600 focus:ring-2 focus:ring-green-200 [&::-webkit-search-cancel-button]:hidden"
             />
@@ -208,7 +210,7 @@ export default function Dashboard() {
               {[0, 1, 2, 3].map((i) => (
                 <li
                   key={i}
-                  className="h-[66px] animate-pulse rounded-2xl bg-white ring-1 ring-slate-100"
+                  className="h-[64px] animate-pulse rounded-2xl bg-white ring-1 ring-slate-100"
                 />
               ))}
             </ul>

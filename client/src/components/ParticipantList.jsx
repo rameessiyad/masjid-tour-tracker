@@ -9,8 +9,8 @@ import {
 } from "lucide-react";
 import { validateForm } from "../utils/format.js";
 
-// Amount box shown against every name. Type an amount, then press Done/Enter or
-// tap anywhere else: it is saved to the database straight away.
+// Amount box shown on the same row as every name. Type an amount, then press
+// Done/Enter or tap anywhere else: it is saved to the database straight away.
 function AmountField({ participant, onSaveAmount }) {
   const [value, setValue] = useState(String(participant.amount_paid));
   const [status, setStatus] = useState("idle"); // idle | saving | saved
@@ -87,10 +87,10 @@ function AmountField({ participant, onSaveAmount }) {
   const paid = participant.amount_paid > 0;
 
   return (
-    <div>
+    <div className="w-28 shrink-0 sm:w-36">
       <div className="relative">
         <span
-          className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+          className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-slate-400"
           aria-hidden="true"
         >
           ₹
@@ -106,30 +106,30 @@ function AmountField({ participant, onSaveAmount }) {
           autoComplete="off"
           placeholder="0"
           aria-label={`Amount paid by ${participant.name}`}
-          className={`h-11 w-full rounded-xl border bg-white pl-8 pr-10 outline-none transition focus:ring-2 ${
+          className={`h-11 w-full rounded-xl border bg-white pl-6 pr-7 text-sm outline-none transition focus:ring-2 sm:pl-7 sm:pr-8 sm:text-base ${
             error
               ? "border-red-400 focus:ring-red-200"
               : "border-slate-300 focus:border-green-600 focus:ring-green-200"
           } ${paid ? "font-medium text-green-800" : "text-slate-500"}`}
         />
         <span
-          className="absolute right-3 top-1/2 -translate-y-1/2"
+          className="absolute right-2 top-1/2 -translate-y-1/2"
           aria-live="polite"
         >
           {status === "saving" && (
             <Loader2
-              size={18}
+              size={16}
               className="animate-spin text-slate-400"
               aria-label="Saving"
             />
           )}
           {status === "saved" && (
-            <Check size={18} className="text-green-600" aria-label="Saved" />
+            <Check size={16} className="text-green-600" aria-label="Saved" />
           )}
         </span>
       </div>
       {error && (
-        <p className="mt-1 text-xs text-red-600" role="alert">
+        <p className="mt-1 text-[11px] leading-tight text-red-600" role="alert">
           {error}
         </p>
       )}
@@ -181,34 +181,33 @@ export default function ParticipantList({
       {participants.map((p, i) => (
         <li
           key={p.id}
-          className="rounded-2xl bg-white p-3 shadow-sm ring-1 ring-slate-100"
+          className="rounded-2xl bg-white p-2.5 shadow-sm ring-1 ring-slate-100 sm:p-3"
         >
-          <div className="flex items-center gap-3">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-green-50 text-sm font-semibold text-green-700">
+          {/* One row: number | name | amount | edit / delete */}
+          <div className="flex items-start gap-2">
+            <span className="mt-1.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-green-50 text-xs font-semibold text-green-700 sm:h-9 sm:w-9 sm:text-sm">
               {i + 1}
             </span>
-            <p className="min-w-0 flex-1 break-words font-medium leading-snug">
-              {p.name}
-            </p>
-            <div className="flex shrink-0 gap-1">
+            <div className="flex min-h-11 min-w-0 flex-1 items-center">
+              <p className="break-words font-medium leading-snug">{p.name}</p>
+            </div>
+            <AmountField participant={p} onSaveAmount={onSaveAmount} />
+            <div className="flex shrink-0">
               <button
                 onClick={() => onEdit(p)}
                 aria-label={`Edit ${p.name}`}
-                className="grid h-11 w-11 place-items-center rounded-xl text-slate-600 transition active:bg-slate-100"
+                className="grid h-11 w-9 place-items-center rounded-xl text-slate-600 transition active:bg-slate-100 sm:w-10"
               >
                 <Pencil size={18} aria-hidden="true" />
               </button>
               <button
                 onClick={() => onDelete(p)}
                 aria-label={`Delete ${p.name}`}
-                className="grid h-11 w-11 place-items-center rounded-xl text-red-600 transition active:bg-red-50"
+                className="grid h-11 w-9 place-items-center rounded-xl text-red-600 transition active:bg-red-50 sm:w-10"
               >
                 <Trash2 size={18} aria-hidden="true" />
               </button>
             </div>
-          </div>
-          <div className="mt-2 pl-12">
-            <AmountField participant={p} onSaveAmount={onSaveAmount} />
           </div>
         </li>
       ))}
