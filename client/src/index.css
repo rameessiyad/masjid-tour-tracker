@@ -1,0 +1,48 @@
+@import "@fontsource/noto-sans-malayalam/400.css";
+@import "@fontsource/noto-sans-malayalam/500.css";
+@import "@fontsource/noto-sans-malayalam/600.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-slate-50 font-sans text-slate-900 antialiased;
+  }
+  /* 16px minimum stops iOS Safari from zooming into inputs on focus. */
+  input {
+    font-size: 16px;
+  }
+  button {
+    touch-action: manipulation;
+  }
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@layer utilities {
+  .animate-sheet-up { animation: sheet-up 0.22s ease-out; }
+  .animate-fade-in { animation: fade-in 0.15s ease-out; }
+  .animate-pop-in { animation: pop-in 0.18s ease-out; }
+  .pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-sheet-up, .animate-fade-in, .animate-pop-in { animation: none; }
+}
